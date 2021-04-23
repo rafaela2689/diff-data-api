@@ -1,13 +1,18 @@
 package com.waes.diff.data;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Base64;
+import java.util.Map;
 
 @RestController
 @RequestMapping("v1/diff")
@@ -22,13 +27,11 @@ public class DiffController {
         this.gson = new Gson();
     }
 
-    @RequestMapping(
-            method = RequestMethod.GET,
-            path = "/{id}/right"
-    )
+    @PostMapping("/{id}/right")
     public void saveDiffRight(@PathVariable final String id,
-                              @RequestBody final String right) {
-        final String decodedData = String.valueOf(Base64.getDecoder().decode(right));
+                              @RequestBody final String rightData) {
+        byte[] decoded = Base64.getDecoder().decode(rightData);
+        final String decodedData = new String(decoded);
         final JsonObject jsonData = gson.fromJson(decodedData, JsonObject.class);
         this.diffService.save(id, jsonData, "right");
     }
@@ -36,15 +39,14 @@ public class DiffController {
     @PostMapping("{id}/left")
     public void saveDiffLeft(@PathVariable final String id,
                               @RequestBody final String left) {
-        final String decodedData = String.valueOf(Base64.getDecoder().decode(left));
+        byte[] decoded = Base64.getDecoder().decode(left);
+        final String decodedData = new String(decoded);
         final JsonObject jsonData = gson.fromJson(decodedData, JsonObject.class);
         this.diffService.save(id, jsonData, "left");
     }
 
     @GetMapping("{id}")
-    public JsonElement getDiff(@PathVariable final String id) {
-        final String diff = this.diffService.getDiffElement(id);
-
-        return JsonParser.parseString(gson.toJson(diff));
+    public Map<String, String> getDiff(@PathVariable final String id) {
+        return this.diffService.getDiffElement(id);
     }
 }
