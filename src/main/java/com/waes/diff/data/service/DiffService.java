@@ -25,6 +25,12 @@ public class DiffService {
         this.gson = new Gson();
     }
 
+    /**
+     * Save the object of each diff side
+     * @param id key to reference the object
+     * @param element content to be diff-ed
+     * @param side represents the side of the diff, it can be right or left
+     */
     public void save(final String id, JsonObject element, String side) {
         final JsonObject elementSide = new JsonObject();
         elementSide.add(side, element);
@@ -39,6 +45,14 @@ public class DiffService {
         this.cacheClient.put(id, serializeObj);
     }
 
+    /**
+     * Get the diff given a key
+     * @param id references the object id
+     * @return returns a map with the result of the diff
+     * { "result": "Equals size" }
+     * { "result": "Different size" }
+     * { "result": "Differences" }
+     */
     public Map<String, String> getDiffElement(final String id) {
         Map<String, String> result = new HashMap<>();
         if (id.isBlank()) {
