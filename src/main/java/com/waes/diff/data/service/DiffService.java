@@ -32,16 +32,17 @@ public class DiffService {
      * @param side represents the side of the diff, it can be right or left
      */
     public void save(final String id, JsonObject element, String side) {
-        final JsonObject elementSide = new JsonObject();
-        elementSide.add(side, element);
+
         String fullObject = this.cacheClient.get(id);
 
         JsonObject jsonConverted = this.gson.fromJson(fullObject, JsonObject.class);
+
         if (jsonConverted == null) {
             jsonConverted = new JsonObject();
         }
         jsonConverted.add(side, element);
         String serializeObj = this.gson.toJson(jsonConverted);
+
         this.cacheClient.put(id, serializeObj);
     }
 

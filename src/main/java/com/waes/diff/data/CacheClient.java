@@ -14,7 +14,7 @@ public class CacheClient {
 
     public String put(final String id, final String element) {
         IMap<String, String> map = hazelcastInstance.getMap(DIFF);
-        return map.putIfAbsent(id, element);
+        return map.put(id, element);
     }
 
     public String get(final String id) {
