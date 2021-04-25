@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.waes.diff.data.CacheClient;
+import com.waes.diff.data.repository.DataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +12,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.waes.diff.data.utils.Messages.*;
+
 @Service
 public class DiffService {
 
     private Gson gson;
 
-    private CacheClient cacheClient;
+    private DataRepository cacheClient;
 
     @Autowired
-    public DiffService(final CacheClient cacheClient) {
+    public DiffService(final DataRepository cacheClient) {
         this.cacheClient = cacheClient;
         this.gson = new Gson();
     }
@@ -32,18 +34,22 @@ public class DiffService {
      * @param side represents the side of the diff, it can be right or left
      */
     public void save(final String id, JsonObject element, String side) {
+        // get object by id
+        String compareStr = this.cacheClient.get(id);
 
-        String fullObject = this.cacheClient.get(id);
+        // convert it to json
+        JsonObject compareJson = this.gson.fromJson(compareStr, JsonObject.class);
 
-        JsonObject jsonConverted = this.gson.fromJson(fullObject, JsonObject.class);
-
-        if (jsonConverted == null) {
-            jsonConverted = new JsonObject();
+        // create a new object if it null
+        if (compareJson == null) {
+            compareJson = new JsonObject();
         }
-        jsonConverted.add(side, element);
-        String serializeObj = this.gson.toJson(jsonConverted);
+        // add element side
+        compareJson.add(side, element);
+        String compareJsonStringify = this.gson.toJson(compareJson); // convert object to string
 
-        this.cacheClient.put(id, serializeObj);
+        // add object in the cache
+        this.cacheClient.put(id, compareJsonStringify);
     }
 
     /**
@@ -56,41 +62,47 @@ public class DiffService {
      */
     public Map<String, String> getDiffElement(final String id) {
         Map<String, String> result = new HashMap<>();
+        // make sure the id is valid
         if (id.isBlank()) {
-            result.put("result", "Id is not valid");
+            result.put("result", INVALID_ID);
             return result;
         }
 
-        final String stringObj = this.cacheClient.get(id);
-        JsonObject response = this.gson.fromJson(stringObj, JsonObject.class);
+        // getting the object by id
+        final String compareStr = this.cacheClient.get(id);
+        JsonObject compareObj = this.gson.fromJson(compareStr, JsonObject.class);
 
-        final JsonElement right = response.get("right");
+        final JsonElement right = compareObj.get("right");
         Map<String, Object> rightMap = gson.fromJson(right, Map.class);
-        final JsonElement left = response.get("left");
-        Map<String, Object> leftObj = gson.fromJson(left, Map.class);
+        final JsonElement left = compareObj.get("left");
+        Map<String, Object> leftMap = gson.fromJson(left, Map.class);
 
+        // checking if there is something to compare
         if (Objects.isNull(rightMap)) {
-            result.put("result", "Empty right side");
+            result.put("result", RIGHT_EMPTY_SIDE);
             return result;
         }
 
-        if (Objects.isNull(leftObj)) {
-            result.put("result", "Empty left side");
+        if (Objects.isNull(leftMap)) {
+            result.put("result", LEFT_EMPTY_SIDE);
             return result;
         }
 
-        if (rightMap.equals(leftObj)) {
-            result.put("result", "Equals side");
+        // checking if objects are equal
+        if (rightMap.equals(leftMap)) {
+            result.put("result", EQUAL_OBJECTS);
             return result;
         }
 
-        if (rightMap.size() != leftObj.size()) {
-            result.put("result", "Different size!");
+        // checking if objects have different size
+        if (rightMap.size() != leftMap.size()) {
+            result.put("result", DIFFERENT_SIZE);
             return result;
         }
 
-        final String differences = Maps.difference(rightMap, leftObj).toString();
-        result.put("result", differences);
+        // checking the objects differences, since they are equal
+        final String differences = Maps.difference(rightMap, leftMap).toString();
+        result.put("result", DIFFERENCES_FOUND + differences);
         return result;
     }
 }

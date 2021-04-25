@@ -1,7 +1,7 @@
 package com.waes.diff.data.service;
 
 import com.google.gson.JsonObject;
-import com.waes.diff.data.CacheClient;
+import com.waes.diff.data.repository.DataRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +20,7 @@ public class DiffServiceTest {
     private DiffService diffService;
 
     @Mock
-    private CacheClient cacheClient;
+    private DataRepository cacheClient;
 
     @Test
     public void shouldSaveDiffRight() {
@@ -64,7 +64,7 @@ public class DiffServiceTest {
 
         verify(cacheClient, times(1)).get(eq(idMap));
 
-        assertEquals(result.get("result"), "Equals side");
+        assertEquals(result.get("result"), "Objects are equal!");
     }
 
     @Test
@@ -77,7 +77,7 @@ public class DiffServiceTest {
 
         verify(cacheClient, times(1)).get(eq(idMap));
 
-        assertEquals(result.get("result"), "Different size!");
+        assertEquals(result.get("result"), "Objects have different sizes!");
     }
 
     @Test
@@ -90,7 +90,7 @@ public class DiffServiceTest {
 
         verify(cacheClient, times(1)).get(eq(idMap));
 
-        assertEquals(result.get("result"), "Empty right side");
+        assertEquals(result.get("result"), "Empty right side!");
     }
 
     @Test
@@ -103,7 +103,7 @@ public class DiffServiceTest {
 
         verify(cacheClient, times(1)).get(eq(idMap));
 
-        assertEquals(result.get("result"), "Empty left side");
+        assertEquals(result.get("result"), "Empty left side!");
     }
 
     @Test
@@ -116,6 +116,6 @@ public class DiffServiceTest {
 
         verify(cacheClient, times(1)).get(eq(idMap));
 
-        assertEquals(result.get("result"), "not equal: value differences={job=(singer, journalist)}");
+        assertEquals(result.get("result"), "Differences found: not equal: value differences={job=(singer, journalist)}");
     }
 }

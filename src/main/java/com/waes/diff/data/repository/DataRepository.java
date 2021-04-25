@@ -1,4 +1,4 @@
-package com.waes.diff.data;
+package com.waes.diff.data.repository;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -6,7 +6,7 @@ import com.hazelcast.map.IMap;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CacheClient {
+public class DataRepository {
 
     public static final String DIFF = "diff";
 
