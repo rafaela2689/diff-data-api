@@ -1,4 +1,4 @@
-package com.waes.diff.data.repository;
+package com.waes.diffdata.repository;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;

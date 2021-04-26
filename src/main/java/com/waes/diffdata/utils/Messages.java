@@ -1,4 +1,4 @@
-package com.waes.diff.data.utils;
+package com.waes.diffdata.utils;
 
 public class Messages {
 

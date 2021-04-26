@@ -1,4 +1,4 @@
-package com.waes.diff.data.config;
+package com.waes.diffdata.config;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.EvictionConfig;

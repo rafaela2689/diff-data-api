@@ -1,8 +1,8 @@
-package com.waes.diff.data.controller;
+package com.waes.diffdata.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.waes.diff.data.service.DiffService;
+import com.waes.diffdata.service.DiffService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

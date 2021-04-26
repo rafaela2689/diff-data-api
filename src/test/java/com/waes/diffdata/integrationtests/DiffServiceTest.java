@@ -1,10 +1,10 @@
-package com.waes.diff.data.integrationtests;
+package com.waes.diffdata.integrationtests;
 
 import com.google.gson.JsonObject;
 import com.hazelcast.core.Hazelcast;
-import com.waes.diff.data.Application;
-import com.waes.diff.data.repository.DataRepository;
-import com.waes.diff.data.service.DiffService;
+import com.waes.diffdata.Application;
+import com.waes.diffdata.repository.DataRepository;
+import com.waes.diffdata.service.DiffService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

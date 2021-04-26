@@ -1,18 +1,17 @@
-package com.waes.diff.data.service;
+package com.waes.diffdata.service;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.waes.diff.data.repository.DataRepository;
+import com.waes.diffdata.repository.DataRepository;
+import com.waes.diffdata.utils.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.waes.diff.data.utils.Messages.*;
 
 @Service
 public class DiffService {
@@ -64,7 +63,7 @@ public class DiffService {
         Map<String, String> result = new HashMap<>();
         // make sure the id is valid
         if (id.isBlank()) {
-            result.put("result", INVALID_ID);
+            result.put("result", Messages.INVALID_ID);
             return result;
         }
 
@@ -79,30 +78,30 @@ public class DiffService {
 
         // checking if there is something to compare
         if (Objects.isNull(rightMap)) {
-            result.put("result", RIGHT_EMPTY_SIDE);
+            result.put("result", Messages.RIGHT_EMPTY_SIDE);
             return result;
         }
 
         if (Objects.isNull(leftMap)) {
-            result.put("result", LEFT_EMPTY_SIDE);
+            result.put("result", Messages.LEFT_EMPTY_SIDE);
             return result;
         }
 
         // checking if objects are equal
         if (rightMap.equals(leftMap)) {
-            result.put("result", EQUAL_OBJECTS);
+            result.put("result", Messages.EQUAL_OBJECTS);
             return result;
         }
 
         // checking if objects have different size
         if (rightMap.size() != leftMap.size()) {
-            result.put("result", DIFFERENT_SIZE);
+            result.put("result", Messages.DIFFERENT_SIZE);
             return result;
         }
 
         // checking the objects differences, since they are equal
         final String differences = Maps.difference(rightMap, leftMap).toString();
-        result.put("result", DIFFERENCES_FOUND + differences);
+        result.put("result", Messages.DIFFERENCES_FOUND + differences);
         return result;
     }
 }

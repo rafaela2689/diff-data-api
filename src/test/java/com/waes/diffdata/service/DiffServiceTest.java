@@ -1,7 +1,7 @@
-package com.waes.diff.data.service;
+package com.waes.diffdata.service;
 
 import com.google.gson.JsonObject;
-import com.waes.diff.data.repository.DataRepository;
+import com.waes.diffdata.repository.DataRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

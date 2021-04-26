@@ -1,8 +1,8 @@
-package com.waes.diff.data.controller;
+package com.waes.diffdata.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.waes.diff.data.service.DiffService;
+import com.waes.diffdata.service.DiffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

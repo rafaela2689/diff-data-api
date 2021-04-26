@@ -1,4 +1,4 @@
-package com.waes.diff.data;
+package com.waes.diffdata;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
