@@ -28,25 +28,33 @@ public class DiffController {
     }
 
     @PostMapping("/{id}/right")
-    public void saveDiffRight(@PathVariable final String id,
+    public String saveDiffRight(@PathVariable final String id,
                               @RequestBody final String rightData) {
-        byte[] decoded = Base64.getDecoder().decode(rightData);
-        final String decodedData = new String(decoded);
-        final JsonObject jsonData = gson.fromJson(decodedData, JsonObject.class);
-        this.diffService.save(id, jsonData, "right");
+        if (rightData == null || rightData.isEmpty()) {
+            return "Invalid data informed!";
+        }
+        final JsonObject jsonData = getJsonObject(rightData);
+        return this.diffService.save(id, jsonData, "right");
     }
 
     @PostMapping("{id}/left")
-    public void saveDiffLeft(@PathVariable final String id,
+    public String saveDiffLeft(@PathVariable final String id,
                               @RequestBody final String left) {
-        byte[] decoded = Base64.getDecoder().decode(left);
-        final String decodedData = new String(decoded);
-        final JsonObject jsonData = gson.fromJson(decodedData, JsonObject.class);
-        this.diffService.save(id, jsonData, "left");
+        if (left == null || left.isEmpty()) {
+            return "Invalid data informed!";
+        }
+        final JsonObject jsonData = getJsonObject(left);
+        return this.diffService.save(id, jsonData, "left");
     }
 
     @GetMapping("{id}")
     public Map<String, String> getDiff(@PathVariable final String id) {
         return this.diffService.getDiffElement(id);
+    }
+
+    private JsonObject getJsonObject(@RequestBody String rightData) {
+        byte[] decoded = Base64.getDecoder().decode(rightData);
+        final String decodedData = new String(decoded);
+        return gson.fromJson(decodedData, JsonObject.class);
     }
 }

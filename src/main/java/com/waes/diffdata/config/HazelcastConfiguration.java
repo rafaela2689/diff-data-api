@@ -1,29 +1,32 @@
 package com.waes.diffdata.config;
 
-import com.hazelcast.config.Config;
-import com.hazelcast.config.EvictionConfig;
-import com.hazelcast.config.EvictionPolicy;
-import com.hazelcast.config.MapConfig;
+import com.hazelcast.config.*;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class HazelcastConfiguration {
 
+    public static final String DIFF = "diff";
+
     @Bean
-    public Config hazelcastConfig() {
-        Config config = new Config();
+    public Config getConfig() {
+        return new Config()
+                .addMapConfig(getMapConfig());
+    }
 
-        config.setInstanceName("hazelcast-instance");
+    private MapConfig getMapConfig() {
+        return new MapConfig(DIFF)
+                .setEvictionConfig(getEvictionConfig())
+                .setTimeToLiveSeconds(7200);
+    }
 
-        MapConfig mapConfig = new MapConfig();
-        mapConfig.setName("configuration");
-        mapConfig.setEvictionConfig(
-                new EvictionConfig().setEvictionPolicy(EvictionPolicy.LRU));
-        mapConfig.setTimeToLiveSeconds(-1);
-
-        config.addMapConfig(mapConfig);
-
-        return config;
+    private EvictionConfig getEvictionConfig() {
+        return new EvictionConfig()
+                .setEvictionPolicy(EvictionPolicy.LRU)
+                .setMaxSizePolicy(MaxSizePolicy.PER_NODE);
     }
 }

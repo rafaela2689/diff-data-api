@@ -32,7 +32,10 @@ public class DiffService {
      * @param element content to be diff-ed
      * @param side represents the side of the diff, it can be right or left
      */
-    public void save(final String id, JsonObject element, String side) {
+    public String save(final String id, JsonObject element, String side) {
+        if (id == null || id.isBlank()) {
+            return "Invalid ID!";
+        }
         // get object by id
         String compareStr = this.cacheClient.get(id);
 
@@ -49,6 +52,8 @@ public class DiffService {
 
         // add object in the cache
         this.cacheClient.put(id, compareJsonStringify);
+
+        return "Saved successfully!";
     }
 
     /**

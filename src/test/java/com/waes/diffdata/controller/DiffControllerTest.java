@@ -41,6 +41,9 @@ public class DiffControllerTest {
         final String side = "right";
         final String encodedJsonBase64 = "eyAKICAgICJuYW1lIjogIlJhZmFlbGEgQ2F2YWxjYW50ZSBkZSBBcmHDumpvIiwKICAgICJhZ2UiOiAzMSwgCiAgICAiam9iIjogIlNvZnR3YXJlIERldmVsb3BlciIKfQ==";
 
+        final String result = "Saved successfully!";
+        when(diffService.save(eq(id), any(), eq(side))).thenReturn(result);
+
         final String responseString = mvc.perform(
                 post("/v1/diff/" + id + "/" + side)
                         .content(encodedJsonBase64)
@@ -51,6 +54,8 @@ public class DiffControllerTest {
                 .getContentAsString();
 
         verify(diffService, times(1)).save(eq(id), any(), eq(side));
+
+        assertEquals(responseString, result);
     }
 
     @Test
@@ -59,6 +64,9 @@ public class DiffControllerTest {
         final String side = "left";
         final String encodedJsonBase64 = "eyAKICAgICJuYW1lIjogIlJhZmFlbGEgQ2F2YWxjYW50ZSBkZSBBcmHDumpvIiwKICAgICJhZ2UiOiAzMSwgCiAgICAiam9iIjogIlNvZnR3YXJlIERldmVsb3BlciIKfQ==";
 
+        final String result = "Saved successfully!";
+        when(diffService.save(eq(id), any(), eq(side))).thenReturn(result);
+
         final String responseString = mvc.perform(
                 post("/v1/diff/" + id + "/" + side)
                         .content(encodedJsonBase64)
@@ -69,6 +77,8 @@ public class DiffControllerTest {
                 .getContentAsString();
 
         verify(diffService, times(1)).save(eq(id), any(), eq(side));
+
+        assertEquals(responseString, result);
     }
 
     @Test
